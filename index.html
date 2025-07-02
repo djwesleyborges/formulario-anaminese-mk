@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Anamnese - Posicionamento Estratégico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0f1419 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border: 2px solid #2c3e50;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            margin: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        .form-section {
+            padding: 30px;
+            background: #1a1a1a;
+        }
+
+        .section-title {
+            color: white;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .question input[type="text"], 
+        .question textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #2c3e50;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #34495e;
+            color: white;
+        }
+
+        .question input[type="text"]:focus, 
+        .question textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52,152,219,0.3);
+        }
+
+        .question textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #2c3e50;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #34495e;
+            color: white;
+        }
+
+        .radio-option:hover {
+            background: #2c3e50;
+            border-color: #3498db;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .radio-option.selected {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border-color: #3498db;
+        }
+
+        .warning-option {
+            color: #e74c3c !important;
+            font-weight: bold;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52,152,219,0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: none;
+        }
+
+        .qualified {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border: 2px solid #f39c12;
+        }
+
+        .highly-qualified {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            border: 2px solid #27ae60;
+            animation: pulse 2s infinite;
+        }
+
+        .partially-qualified {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            border: 2px solid #f39c12;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+        }
+
+        .disqualified {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: 2px solid #e74c3c;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #2c3e50;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ FORMULÁRIO DE ANAMNESE</h1>
+            <p>POSICIONAMENTO ESTRATÉGICO</p>
+        </div>
+
+        <div class="warning">
+            🚫 <strong>ANTES DE TUDO, UM AVISO IMPORTANTE:</strong><br><br>
+            "Se você chegou até aqui, entenda: esse não é um formulário pra saber se você quer contratar um serviço. É um formulário pra entender se você tem o perfil, o comprometimento e a coragem de construir uma marca que lidera, vende e se torna autoridade.<br><br>
+            Aqui não existe hack, viralzinho ou fórmula fácil. Existe processo. Existe trabalho. Existe desconforto.<br><br>
+            Se você não está disposto a investir dinheiro, tempo, energia e principalmente sua imagem… você pode fechar essa página agora."
+        </div>
+
+        <form id="anamneseForm" class="form-section" action="envia_formulario.php" method="POST">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- Seção 1: Quem é você e sua marca -->
+            <div class="section-title">🧠 QUEM É VOCÊ E SUA MARCA?</div>
+            
+            <div class="question">
+                <label>Qual o nome da sua marca?</label>
+                <input type="text" name="nome_marca" required>
+            </div>
+
+            <div class="question">
+                <label>Qual é seu @ no Instagram?</label>
+                <input type="text" name="instagram" required>
+            </div>
+
+            <div class="question">
+                <label>O que exatamente você vende? (Produto, serviço ou solução)</label>
+                <textarea name="produto" required></textarea>
+            </div>
+
+            <div class="question">
+                <label>Por que sua marca existe? Qual é o propósito que te faz levantar da cama todos os dias?</label>
+                <textarea name="proposito" required></textarea>
+            </div>
+
+            <div class="question">
+                <label>Você se considera:</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="perfil" value="amador" data-score="-2">
+                        <span>Um amador buscando se encontrar</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="perfil" value="profissional" data-score="1">
+                        <span>Um profissional que quer evoluir</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="perfil" value="lider" data-score="3">
+                        <span>Um líder disposto a dominar e ser autoridade</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção 2: Diagnóstico -->
+            <div class="section-title">🔥 DIAGNÓSTICO DE VERDADE — SEM ROMANTISMO:</div>
+
+            <div class="question">
+                <label>Hoje, o que te impede de ser uma marca forte, desejada e reconhecida?</label>
+                <textarea name="impedimento" required></textarea>
+            </div>
+
+            <div class="question">
+                <label>Seja honesto: você tem clareza do seu diferencial ou sente que sua comunicação é mais do mesmo?</label>
+                <textarea name="diferencial" required></textarea>
+            </div>
+
+            <div class="question">
+                <label>Como você se sente quando precisa aparecer no Instagram?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="sentimento" value="confortavel" data-score="3">
+                        <span>Me sinto confortável, faz parte do jogo</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="sentimento" value="inseguranca" data-score="1">
+                        <span>Dá insegurança, mas encaro</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="sentimento" value="bloqueio" data-score="-2">
+                        <span class="warning-option">Tenho bloqueio, vergonha, medo do julgamento</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Se você respondeu que tem vergonha, medo ou bloqueio… está realmente disposto a superar isso, mesmo que doa?</label>
+                <textarea name="superar" required></textarea>
+            </div>
+
+            <div class="question">
+                <label>Qual é o seu nível de maturidade emocional?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="maturidade" value="pronto" data-score="3">
+                        <span>Tô pronto, bora pro jogo</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="maturidade" value="preciso" data-score="0">
+                        <span>Sei que preciso, mas ainda dói</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="maturidade" value="pressao" data-score="-3">
+                        <span class="warning-option">Não sei se aguento a pressão</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção 3: Sobre o processo -->
+            <div class="section-title">🏗️ SOBRE O PROCESSO — ENTENDA AGORA:</div>
+
+            <div class="question">
+                <label>Você entende que é necessário INVESTIR TEMPO? Está preparado?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="tempo" value="dever" data-score="3">
+                        <span>Sim, é meu dever como dono da minha marca</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="tempo" value="apoio" data-score="1">
+                        <span>Sei que preciso, mas preciso de apoio no processo</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="tempo" value="alguem" data-score="-3">
+                        <span class="warning-option">Não, queria que alguém fizesse tudo por mim (⚠️ NÃO É O SEU LUGAR)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Você entende que posicionamento não é sobre agradar todo mundo?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="posicionamento" value="pronto" data-score="3">
+                        <span>Sim, tô pronto pra isso</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="posicionamento" value="incomoda" data-score="1">
+                        <span>Me incomoda, mas vou encarar</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="posicionamento" value="preocupo" data-score="-2">
+                        <span class="warning-option">Não, me preocupo muito com o que os outros pensam</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Sobre sua relação com sua imagem física e emocional:</label>
+                <textarea name="imagem" required></textarea>
+            </div>
+
+            <!-- Seção 4: Investimento -->
+            <div class="section-title">💰 DINHEIRO, INVESTIMENTO E COMPROMETIMENTO:</div>
+
+            <div class="question">
+                <label>Você está buscando:</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="investimento" value="barato" data-score="-3">
+                        <span class="warning-option">Algo barato, só pra "ter uma presença" (⚠️ Não é o seu lugar.)</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="investimento" value="intermediario" data-score="1">
+                        <span>Algo intermediário, pra começar a estruturar</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="investimento" value="melhor" data-score="3">
+                        <span>A MELHOR ESTRATÉGIA, com o MELHOR POSICIONAMENTO</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Qual sua faixa de investimento MENSAL que você está disposto a fazer para construir uma marca forte?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="investimento_mensal" value="ate_500" data-score="-3">
+                        <span class="warning-option">Até R$ 500 (⚠️ Impossível fazer algo sério com esse valor)</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="investimento_mensal" value="500_1000" data-score="-1">
+                        <span class="warning-option">R$ 500 a R$ 1.000 (⚠️ Ainda muito limitado para resultados reais)</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="investimento_mensal" value="1000_2000" data-score="1">
+                        <span>R$ 1.000 a R$ 2.000 (Começando a ficar interessante)</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="investimento_mensal" value="2000_5000" data-score="3">
+                        <span>R$ 2.000 a R$ 5.000 (Agora sim, investimento sério)</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="investimento_mensal" value="acima_5000" data-score="3">
+                        <span>Acima de R$ 5.000 (Pronto para dominar o mercado)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Sobre TRÁFEGO PAGO (Facebook/Instagram Ads, Google Ads), você:</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="trafego_pago" value="nunca_usei" data-score="0">
+                        <span>Nunca usei, mas estou aberto a aprender e investir</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="trafego_pago" value="ja_usei_pouco" data-score="1">
+                        <span>Já usei, mas com pouco investimento e resultados ruins</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="trafego_pago" value="uso_regularmente" data-score="2">
+                        <span>Uso regularmente e sei que é fundamental</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="trafego_pago" value="entendo_necessidade" data-score="3">
+                        <span>Entendo que sem tráfego pago hoje é impossível escalar uma marca</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="trafego_pago" value="nao_quero" data-score="-2">
+                        <span class="warning-option">Não quero investir em tráfego pago, só quero orgânico (⚠️ Mentalidade ultrapassada)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Se eu te disser que o investimento mínimo para um trabalho sério de posicionamento + execução é a partir de R$ 2.000/mês, você:</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="valor_minimo" value="sem_problema" data-score="3">
+                        <span>Sem problema, entendo que qualidade tem preço</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="valor_minimo" value="justo" data-score="2">
+                        <span>Acho justo pelo valor que será entregue</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="valor_minimo" value="alto_mas_pago" data-score="1">
+                        <span>Acho alto, mas estou disposto a pagar pelo resultado</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="valor_minimo" value="muito_caro" data-score="-2">
+                        <span class="warning-option">Acho muito caro (⚠️ Você ainda não entende o valor)</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="valor_minimo" value="impossivel" data-score="-3">
+                        <span class="warning-option">É impossível pra mim (⚠️ Não é o momento certo)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Você entende que o processo de construção de marca é uma jornada?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="processo" value="ciente" data-score="3">
+                        <span>Sim, tô 100% ciente</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="processo" value="ansiedade" data-score="1">
+                        <span>Tenho ansiedade, mas aceito o processo</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="processo" value="hack" data-score="-3">
+                        <span class="warning-option">Na real, queria um hack rápido (⚠️ Esse não é o caminho.)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question">
+                <label>Qual é sua urgência?</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" name="urgencia" value="pesquisando" data-score="-1">
+                        <span>Só tô pesquisando</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="urgencia" value="meses" data-score="1">
+                        <span>Talvez nos próximos meses</span>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" name="urgencia" value="ontem" data-score="3">
+                        <span>É pra ontem. Tô decidido.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção 5: Pergunta final -->
+            <div class="section-title">🏆 ÚLTIMA E MAIS IMPORTANTE PERGUNTA:</div>
+
+            <div class="question">
+                <label>Por que você acredita que está pronto pra esse nível de construção? Por que eu deveria te escolher pra ser uma marca que vai dominar seu mercado?</label>
+                <textarea name="motivo" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                🚀 Enviar e assumir meu compromisso com a construção da minha marca
+            </button>
+
+            <div id="result" class="result"></div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('anamneseForm');
+        const progressFill = document.getElementById('progressFill');
+        const result = document.getElementById('result');
+        
+        // Atualizar progresso
+        function updateProgress() {
+            const requiredInputs = form.querySelectorAll('input[required], textarea[required]');
+            const radioGroups = form.querySelectorAll('input[type="radio"]');
+            const radioGroupNames = [...new Set([...radioGroups].map(r => r.name))];
+            
+            let completedRequired = 0;
+            let completedRadio = 0;
+            
+            requiredInputs.forEach(input => {
+                if (input.value.trim() !== '') completedRequired++;
+            });
+            
+            radioGroupNames.forEach(name => {
+                if (form.querySelector(`input[name="${name}"]:checked`)) completedRadio++;
+            });
+            
+            const totalRequired = requiredInputs.length + radioGroupNames.length;
+            const totalCompleted = completedRequired + completedRadio;
+            
+            const progress = Math.min((totalCompleted / totalRequired) * 100, 100);
+            progressFill.style.width = progress + '%';
+            
+            // Mostrar resultado imediatamente se formulário completo
+            if (totalCompleted === totalRequired) {
+                calculateAndShowResult();
+            }
+        }
+
+        // Função para identificar áreas de melhoria
+        function getImprovementAreas(score) {
+            const areas = [];
+            
+            if (score < 16) areas.push("🔸 Precisa desenvolver mais confiança para aparecer nas redes sociais");
+            if (score < 17) areas.push("🔸 Ainda tem receio de investir no valor adequado para ter resultados de qualidade");
+            if (score < 18) areas.push("🔸 Falta mais clareza sobre seu diferencial competitivo");
+            if (score < 19) areas.push("🔸 Precisa aumentar a urgência e decisão para agir");
+            
+            return areas.length > 0 ? areas.join("<br>") : "Você está no caminho certo, mas alguns ajustes podem te levar ao próximo nível.";
+        }
+
+        // Função para identificar motivos de desqualificação
+        function getDisqualificationReasons(score) {
+            const reasons = [];
+            
+            if (score < 0) reasons.push("🔴 Suas respostas indicam que você busca fórmulas mágicas e não quer se comprometer");
+            if (score < 3) reasons.push("🔴 Você demonstra medo excessivo de exposição e críticas");
+            if (score < 6) reasons.push("🔴 Não está disposto a fazer o investimento necessário para ter resultados reais");
+            if (score < 9) reasons.push("🔴 Falta maturidade emocional para encarar o processo de construção de marca");
+            if (score < 12) reasons.push("🔴 Ainda não desenvolveu mentalidade de liderança e autoridade");
+            
+            return reasons.length > 0 ? reasons.join("<br>") : "Você ainda não está preparado para esse nível de comprometimento.";
+        }
+
+        // Calcular e mostrar resultado
+        function calculateAndShowResult() {
+            let score = 0;
+            const radioInputs = form.querySelectorAll('input[type="radio"]:checked');
+            
+            radioInputs.forEach(input => {
+                const scoreValue = parseInt(input.getAttribute('data-score')) || 0;
+                score += scoreValue;
+            });
+
+            // Critérios de qualificação
+            let qualification = '';
+            let message = '';
+            let resultClass = '';
+
+            if (score >= 25) {
+                qualification = 'CLIENTE ALTAMENTE QUALIFICADO';
+                resultClass = 'highly-qualified';
+                message = `
+                    🏆 <strong>${qualification}</strong><br><br>
+                    <strong>Pontuação: ${score}/33</strong><br><br>
+                    🎉 <strong>PARABÉNS! VOCÊ É NOSSO CLIENTE IDEAL!</strong><br><br>
+                    Você demonstrou ter TODOS os elementos necessários para se tornar uma marca líder:<br><br>
+                    ✅ <strong>Mindset de liderança</strong> - Entende que é preciso ser autoridade<br>
+                    ✅ <strong>Maturidade emocional</strong> - Não tem medo de críticas e julgamentos<br>
+                    ✅ <strong>Comprometimento real</strong> - Está disposto a investir tempo e energia<br>
+                    ✅ <strong>Visão de investimento</strong> - Entende que qualidade custa e está disposto a pagar<br>
+                    ✅ <strong>Mentalidade de escala</strong> - Sabe que tráfego pago é essencial<br>
+                    ✅ <strong>Urgência verdadeira</strong> - Quer resultados agora<br><br>
+                    <strong>💰 IMPORTANTE: Você demonstrou estar preparado para o investimento mínimo de R$ 2.000/mês</strong><br><br>
+                    <strong>🚀 Você está pronto para DOMINAR seu mercado e se tornar a referência absoluta no seu segmento!</strong>
+                `;
+            } else if (score >= 18) {
+                qualification = 'CLIENTE PARCIALMENTE QUALIFICADO';
+                resultClass = 'partially-qualified';
+                message = `
+                    ⚠️ <strong>${qualification}</strong><br><br>
+                    <strong>Pontuação: ${score}/33</strong><br><br>
+                    Você tem potencial, mas ainda precisa evoluir em alguns pontos:<br><br>
+                    ${getImprovementAreas(score)}<br>
+                    <strong>💡 O QUE VOCÊ PRECISA MELHORAR:</strong><br><br>
+                    🔸 Desenvolver mais coragem para se expor<br>
+                    🔸 Aumentar a maturidade emocional para lidar com críticas<br>
+                    🔸 Entender melhor o valor do investimento em posicionamento (mínimo R$ 2.000/mês)<br>
+                    🔸 Compreender a importância do tráfego pago para escalar<br>
+                    🔸 Ter mais clareza sobre seus diferenciais<br>
+                    🔸 Desenvolver mais urgência e decisão<br><br>
+                    <strong>Recomendamos uma conversa estratégica para identificar seus pontos de melhoria específicos.</strong>
+                `;
+            } else {
+                qualification = 'CLIENTE DESQUALIFICADO';
+                resultClass = 'disqualified';
+                message = `
+                    ❌ <strong>${qualification}</strong><br><br>
+                    <strong>Pontuação: ${score}/33</strong><br><br>
+                    <strong>🚫 POR QUE VOCÊ NÃO TEM O PERFIL NECESSÁRIO:</strong><br><br>
+                    ${getDisqualificationReasons(score)}<br>
+                    <strong>❌ PRINCIPAIS PROBLEMAS IDENTIFICADOS:</strong><br><br>
+                    🔴 <strong>Mentalidade de amador</strong> - Ainda não se vê como líder<br>
+                    🔴 <strong>Medo de exposição</strong> - Tem vergonha de aparecer e ser julgado<br>
+                    🔴 <strong>Busca por soluções baratas</strong> - Não consegue investir R$ 2.000/mês<br>
+                    🔴 <strong>Não entende tráfego pago</strong> - Acha que só orgânico resolve<br>
+                    🔴 <strong>Quer hack rápido</strong> - Não aceita que é um processo<br>
+                    🔴 <strong>Falta de comprometimento</strong> - Quer que outros façam por você<br>
+                    🔴 <strong>Só está pesquisando</strong> - Não tem urgência real<br><br>
+                    <strong>💬 NOSSA RECOMENDAÇÃO:</strong><br>
+                    Trabalhe primeiro seu desenvolvimento pessoal, junte capital para investir pelo menos R$ 2.000/mês, estude sobre empreendedorismo e marketing digital, e volte quando estiver com a mentalidade de quem quer LIDERAR, não apenas existir no mercado.
+                `;
+            }
+
+            result.className = `result ${resultClass}`;
+            result.innerHTML = message;
+            result.style.display = 'block';
+            
+            // Scroll to result
+            setTimeout(() => {
+                result.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        // Destacar opção selecionada e atualizar progresso
+        form.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') {
+                // Remove selected class from all options in the same group
+                const groupName = e.target.name;
+                const allOptions = form.querySelectorAll(`input[name="${groupName}"]`);
+                allOptions.forEach(option => {
+                    option.closest('.radio-option').classList.remove('selected');
+                });
+                
+                // Add selected class to chosen option
+                e.target.closest('.radio-option').classList.add('selected');
+            }
+            updateProgress();
+        });
+
+        // Atualizar progresso em campos de texto
+        form.addEventListener('input', function(e) {
+            if (e.target.type === 'text' || e.target.tagName === 'TEXTAREA') {
+                updateProgress();
+            }
+        });
+
+        // Initial progress update
+        updateProgress();
+    </script>
+</body>
+</html>
