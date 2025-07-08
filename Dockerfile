@@ -16,4 +16,6 @@ RUN composer install || true
 
 RUN chown -R www-data:www-data /var/www/html
 
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
 EXPOSE 8090
